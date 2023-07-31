@@ -40,8 +40,9 @@ if option == 'Generuj numery':
 elif option == 'Sprawdź numer':
     number_to_check = st.text_input('Podaj numer strażaka do sprawdzenia:')
     if st.button('Sprawdź'):
-        if is_valid_fireather_number(number_to_check):
+        if is_valid_firefighter_number(number_to_check): # Poprawiona nazwa funkcji
             st.success('Numer jest poprawny.')
         else:
             st.error('Numer jest niepoprawny.')
+
 
