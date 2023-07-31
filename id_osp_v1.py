@@ -17,7 +17,7 @@ def generate_firefighter_numbers(count):
         numbers.append(firefighter_number + str(control_digit))
     return numbers
 
-def is_valid_firefighter_number(number):
+def is_valid_firefighter_number(number): # Poprawiona nazwa funkcji
     if len(number) != 8:
         return False
     firefighter_number = int(number[:-1])
@@ -40,9 +40,7 @@ if option == 'Generuj numery':
 elif option == 'Sprawdź numer':
     number_to_check = st.text_input('Podaj numer strażaka do sprawdzenia:')
     if st.button('Sprawdź'):
-        if is_valid_firefighter_number(number_to_check): # Poprawiona nazwa funkcji
+        if is_valid_firefighter_number(number_to_check): # Upewnij się, że ta nazwa funkcji jest zgodna z definicją
             st.success('Numer jest poprawny.')
         else:
             st.error('Numer jest niepoprawny.')
-
-
