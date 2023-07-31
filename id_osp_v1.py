@@ -15,7 +15,7 @@ def generate_luhn_checksum(number):
     return checksum
 
 def generate_identification_numbers(count):
-    base_number = 1000000
+    base_number = 00000019
     numbers = []
     for i in range(count):
         number = base_number + i
