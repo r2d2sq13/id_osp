@@ -1,46 +1,49 @@
 import streamlit as st
 
-def calculate_control_digit(firefighter_number):
-    digits = [int(d) for d in str(firefighter_number).zfill(7)]
-    weights = range(1, 8)
-    product = [d * w for d, w in zip(digits, weights)]
-    control_digit = sum(product) % 11
-    if control_digit == 10:
-        control_digit = 0
-    return control_digit
+def generate_luhn_checksum(number):
+    total = 0
+    reverse_digits = [int(digit) for digit in str(number)[::-1]]
+    for i, digit in enumerate(reverse_digits):
+        if i % 2 == 0:
+            total += digit
+        else:
+            doubled = digit * 2
+            if doubled > 9:
+                doubled -= 9
+            total += doubled
+    checksum = (10 - (total % 10)) % 10
+    return checksum
 
-def generate_firefighter_numbers(count):
+def generate_identification_numbers(count):
+    base_number = 1000000
     numbers = []
     for i in range(count):
-        firefighter_number = str(i).zfill(7)
-        control_digit = calculate_control_digit(i)
-        numbers.append(firefighter_number + str(control_digit))
+        number = base_number + i
+        checksum = generate_luhn_checksum(number)
+        full_number = int(str(number) + str(checksum))
+        numbers.append(full_number)
     return numbers
 
-def is_valid_firefighter_number(number): # Poprawiona nazwa funkcji
-    if len(number) != 8:
-        return False
-    firefighter_number = int(number[:-1])
-    control_digit = int(number[-1])
-    return calculate_control_digit(firefighter_number) == control_digit
+def validate_identification_number(number):
+    original_checksum = int(str(number)[-1])
+    base_number = int(str(number)[:-1])
+    calculated_checksum = generate_luhn_checksum(base_number)
+    return original_checksum == calculated_checksum
 
-st.title('Generowanie i Walidacja Numerów Strażaków')
+st.title("OSP Strażaków Numer Identyfikacyjny")
 
-st.sidebar.header('Menu')
-option = st.sidebar.selectbox('Wybierz opcję:', ('Generuj numery', 'Sprawdź numer'))
+st.header("Generowanie Numerów Identyfikacyjnych")
+count = st.number_input("Podaj liczbę numerów identyfikacyjnych do wygenerowania:", min_value=1, value=1)
+if st.button("Generuj Numery"):
+    numbers = generate_identification_numbers(count)
+    st.write("Wygenerowane numery identyfikacyjne:")
+    for number in numbers:
+        st.write(number)
 
-if option == 'Generuj numery':
-    count = st.number_input('Podaj liczbę numerów do wygenerowania:', min_value=1, value=10)
-    if st.button('Generuj'):
-        numbers = generate_firefighter_numbers(count)
-        st.write('Wygenerowane numery strażaków:')
-        for number in numbers:
-            st.write(number)
-
-elif option == 'Sprawdź numer':
-    number_to_check = st.text_input('Podaj numer strażaka do sprawdzenia:')
-    if st.button('Sprawdź'):
-        if is_valid_firefighter_number(number_to_check): # Upewnij się, że ta nazwa funkcji jest zgodna z definicją
-            st.success('Numer jest poprawny.')
-        else:
-            st.error('Numer jest niepoprawny.')
+st.header("Sprawdzanie Numeru Identyfikacyjnego")
+check_number = st.number_input("Podaj numer identyfikacyjny do sprawdzenia:", min_value=10000000, value=10000000)
+if st.button("Sprawdź Numer"):
+    if validate_identification_number(check_number):
+        st.success("Numer identyfikacyjny jest poprawny.")
+    else:
+        st.error("Numer identyfikacyjny jest niepoprawny.")
