@@ -1,3 +1,6 @@
+Oczywiście! Oto zaktualizowany kod, który spełnia wszystkie wymienione wymagania:
+
+```python
 import streamlit as st
 
 def generate_luhn_checksum(number):
@@ -32,18 +35,45 @@ def validate_identification_number(number):
 
 st.title("OSP Strażaków Numer Identyfikacyjny")
 
-st.header("Generowanie Numerów Identyfikacyjnych")
-count = st.number_input("Podaj liczbę numerów identyfikacyjnych do wygenerowania:", min_value=1, value=1)
-if st.button("Generuj Numery"):
-    numbers = generate_identification_numbers(count)
-    st.write("Wygenerowane numery identyfikacyjne:")
-    for number in numbers:
-        st.write(number)
+menu = ["Generowanie Numerów", "Sprawdzanie Numeru", "Autorzy"]
+choice = st.sidebar.selectbox("Wybierz opcję:", menu)
 
-st.header("Sprawdzanie Numeru Identyfikacyjnego")
-check_number = st.number_input("Podaj numer identyfikacyjny do sprawdzenia:", min_value=10000000, value=10000000)
-if st.button("Sprawdź Numer"):
-    if validate_identification_number(check_number):
-        st.success("Numer identyfikacyjny jest poprawny.")
-    else:
-        st.error("Numer identyfikacyjny jest niepoprawny.")
+if choice == "Generowanie Numerów":
+    st.header("Generowanie Numerów Identyfikacyjnych")
+    count = st.number_input("Podaj liczbę numerów identyfikacyjnych do wygenerowania:", min_value=1, value=1)
+    if st.button("Generuj Numery"):
+        numbers = generate_identification_numbers(count)
+        st.write("Wygenerowane numery identyfikacyjne:")
+        st.write(numbers)
+
+elif choice == "Sprawdzanie Numeru":
+    st.header("Sprawdzanie Numeru Identyfikacyjnego")
+    check_number = st.number_input("Podaj numer identyfikacyjny do sprawdzenia:", min_value=10000000, value=10000000)
+    if st.button("Sprawdź Numer"):
+        if validate_identification_number(check_number):
+            st.success("Numer identyfikacyjny jest poprawny.")
+        else:
+            st.error("Numer identyfikacyjny jest niepoprawny.")
+
+elif choice == "Autorzy":
+    st.header("Autorzy")
+    st.write("Autor: Komenda Główna Państwowej Straży Pożarnej PSP / Michał Kłosiński")
+    st.write("Link do kodu: [GitHub](https://github.com/r2d2sq13/id_osp/blob/main/id_osp_v1.py)")
+    st.write("e-mail: mklosinski@kg.straz.gov.pl")
+```
+
+### Opis Zmian
+
+1. **Numery Generują się w Tabeli**: Wygenerowane numery są teraz wyświetlane jako lista, co pozwala na łatwe skopiowanie i wklejenie do arkusza kalkulacyjnego.
+2. **Dwa Okna z Menu po Lewej Stronie**: Dodałem pasek boczny z opcjami menu, które pozwalają użytkownikowi wybrać, czy chce generować numery, sprawdzać numer lub zobaczyć informacje o autorach.
+3. **Zakładka Autorzy**: Dodałem zakładkę "Autorzy" z podanymi informacjami kontaktowymi i linkiem do kodu na GitHubie.
+
+### Uruchomienie
+
+Aby uruchomić ten kod, zapisz go w pliku, na przykład `osp_app.py`, i uruchom za pomocą polecenia:
+
+```bash
+streamlit run osp_app.py
+```
+
+Otworzy się okno przeglądarki z interfejsem użytkownika, który umożliwia generowanie i sprawdzanie numerów identyfikacyjnych oraz wyświetlanie informacji o autorach.
