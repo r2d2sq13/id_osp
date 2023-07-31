@@ -1,8 +1,8 @@
 import streamlit as st
 
-def generate_luhn_checksum(number):
+def generate_luhn_checksum(number_str):
     total = 0
-    reverse_digits = [int(digit) for digit in str(number)[::-1]]
+    reverse_digits = [int(digit) for digit in number_str[::-1]]
     for i, digit in enumerate(reverse_digits):
         if i % 2 == 0:
             total += digit
@@ -15,19 +15,19 @@ def generate_luhn_checksum(number):
     return checksum
 
 def generate_identification_numbers(count):
-    base_number = 00000019
+    base_number = 1000000
     numbers = []
     for i in range(count):
-        number = base_number + i
-        checksum = generate_luhn_checksum(number)
-        full_number = int(str(number) + str(checksum))
+        number_str = str(base_number + i).zfill(7)
+        checksum = generate_luhn_checksum(number_str)
+        full_number = int(number_str + str(checksum))
         numbers.append(full_number)
     return numbers
 
-def validate_identification_number(number):
-    original_checksum = int(str(number)[-1])
-    base_number = int(str(number)[:-1])
-    calculated_checksum = generate_luhn_checksum(base_number)
+def validate_identification_number(number_str):
+    original_checksum = int(number_str[-1])
+    base_number_str = number_str[:-1]
+    calculated_checksum = generate_luhn_checksum(base_number_str)
     return original_checksum == calculated_checksum
 
 st.title("OSP Strażaków Numer Identyfikacyjny")
@@ -45,9 +45,9 @@ if choice == "Generowanie Numerów":
 
 elif choice == "Sprawdzanie Numeru":
     st.header("Sprawdzanie Numeru Identyfikacyjnego")
-    check_number = st.number_input("Podaj numer identyfikacyjny do sprawdzenia:", min_value=10000000, value=10000000)
+    check_number_str = st.text_input("Podaj numer identyfikacyjny do sprawdzenia:", value="00000019")
     if st.button("Sprawdź Numer"):
-        if validate_identification_number(check_number):
+        if validate_identification_number(check_number_str):
             st.success("Numer identyfikacyjny jest poprawny.")
         else:
             st.error("Numer identyfikacyjny jest niepoprawny.")
