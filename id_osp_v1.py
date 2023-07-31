@@ -30,7 +30,7 @@ def validate_identification_number(number_str):
     calculated_checksum = generate_luhn_checksum(base_number_str)
     return original_checksum == calculated_checksum
 
-st.title("OSP Strażaków Numer Identyfikacyjny")
+st.title("Przykłądowy generator numerów Identyfikacyjnych dla strażaków OSP")
 
 menu = ["Generowanie Numerów", "Sprawdzanie Numeru", "Autorzy"]
 choice = st.sidebar.selectbox("Wybierz opcję:", menu)
